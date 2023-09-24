@@ -1,10 +1,12 @@
-;;; decor.el --- Modify visual decorations
+;;; decor.el --- Modify visual decorations -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2023 Peter Badida
 
 ;; Author: Peter Badida <keyweeusr@gmail.com>
-;; Keywords: window, decoration, distraction, x11, xprop
+;; Keywords: convenience, window, decoration, distraction, x11, xprop
 ;; Version: 1.0.0
+;; Package-Requires: ((emacs "24.1"))
+;; Homepage: https://github.com/KeyWeeUsr/decor
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -28,6 +30,9 @@
 ;;; Code:
 
 (defun decor-check-bin (buff-name cmd)
+  "Check if a binary is present on the system.
+Argument BUFF-NAME destination to write failure to.
+Argument CMD name of the checked binary."
   (inline)
   (when (eq (executable-find cmd) nil)
     (save-window-excursion
@@ -36,6 +41,7 @@
     t))
 
 (defun decor-check-deps ()
+  "Check if all deps are present on the system."
   (inline)
   (let ((buff-name "*decor deps*")
         (failed nil))
@@ -49,25 +55,31 @@
     (if (eq failed t)
         (progn
           (switch-to-buffer (get-buffer-create buff-name))
-          (user-error "Some deps are missing"))
+          (error "Some deps are missing"))
       (kill-buffer (get-buffer-create buff-name)))))
 
 (defun decor-toggle-single-frame (win-id on)
+  "Toggle decorations of a single frame.
+Argument WIN-ID frame's window ID.
+Argument ON t/nil to enable/disable."
   (call-process "xprop"
                 nil nil nil
                 "-id" win-id "-format" "_MOTIF_WM_HINTS" "32c"
                 "-set" "_MOTIF_WM_HINTS" (if (eq on t) "1" "2")))
 
 (defun decor-toggle-all-frames (on)
+  "Toggle decorations ON (t) or off (nil) for all Emacs frames."
   (dolist (frame (frame-list))
     (decor-toggle-single-frame (frame-parameter frame 'outer-window-id) on)))
 
 (defun decor-all-frames-on ()
+  "Toggle decorations on for all Emacs frames."
   (interactive)
   (decor-check-deps)
   (decor-toggle-all-frames t))
 
 (defun decor-all-frames-off ()
+  "Toggle decorations off for all Emacs frames."
   (interactive)
   (decor-check-deps)
   (decor-toggle-all-frames nil))
