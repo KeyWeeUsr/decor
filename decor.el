@@ -1,4 +1,4 @@
-;;; decor.el --- Modify visual decorations -*- lexical-binding: t; -*-
+;;; decor.el --- Modify visual decorations (X11) -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2023 Peter Badida
 
