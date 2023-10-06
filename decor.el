@@ -33,7 +33,6 @@
   "Check if a binary is present on the system.
 Argument BUFF-NAME destination to write failure to.
 Argument CMD name of the checked binary."
-  (inline)
   (when (eq (executable-find cmd) nil)
     (save-window-excursion
       (switch-to-buffer (get-buffer-create buff-name))
@@ -42,7 +41,6 @@ Argument CMD name of the checked binary."
 
 (defun decor-check-deps ()
   "Check if all deps are present on the system."
-  (inline)
   (let ((buff-name "*decor deps*")
         (failed nil))
     ;; clean first
