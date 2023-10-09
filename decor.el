@@ -29,7 +29,7 @@
 
 ;;; Code:
 
-(defun decor-check-bin (buff-name cmd)
+(defun decor--check-bin (buff-name cmd)
   "Check if a binary is present on the system.
 Argument BUFF-NAME destination to write failure to.
 Argument CMD name of the checked binary."
@@ -39,7 +39,7 @@ Argument CMD name of the checked binary."
       (insert (format "'%s' not found\n" cmd)))
     t))
 
-(defun decor-check-deps ()
+(defun decor--check-deps ()
   "Check if all deps are present on the system."
   (let ((buff-name "*decor deps*")
         (failed nil))
@@ -48,7 +48,7 @@ Argument CMD name of the checked binary."
 
     ;; binaries
     (dolist (item (list "xprop"))
-      (when (decor-check-bin buff-name item) (setq failed t)))
+      (when (decor--check-bin buff-name item) (setq failed t)))
 
     (if (eq failed t)
         (progn
@@ -73,13 +73,13 @@ Argument ON t/nil to enable/disable."
 (defun decor-all-frames-on ()
   "Toggle decorations on for all Emacs frames."
   (interactive)
-  (decor-check-deps)
+  (decor--check-deps)
   (decor-toggle-all-frames t))
 
 (defun decor-all-frames-off ()
   "Toggle decorations off for all Emacs frames."
   (interactive)
-  (decor-check-deps)
+  (decor--check-deps)
   (decor-toggle-all-frames nil))
 
 (provide 'decor)
