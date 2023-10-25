@@ -82,5 +82,13 @@ Argument ON t/nil to enable/disable."
   (decor--check-deps)
   (decor-toggle-all-frames nil))
 
+;;;###autoload
+(define-minor-mode decor-mode
+  "Trigger custom decoration of all Emacs desktop Frames."
+  :global t
+  (if decor-mode
+      (decor-all-frames-off)
+    (decor-all-frames-on)))
+
 (provide 'decor)
 ;;; decor.el ends here
