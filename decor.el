@@ -86,6 +86,7 @@ Argument ON t/nil to enable/disable."
 (define-minor-mode decor-mode
   "Trigger custom decoration of all Emacs desktop Frames."
   :global t
+  :group 'decor
   (if decor-mode
       (decor-all-frames-off)
     (decor-all-frames-on)))
