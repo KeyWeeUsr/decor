@@ -31,7 +31,7 @@
 
 (defgroup decor
   nil
-  "Customization group for `decor-mode'-"
+  "Customization group for `decor-mode'."
   :group 'convenience
   :group 'external
   :group 'frames
@@ -40,7 +40,8 @@
 (defcustom decor-always-check-deps
   t
   "Always look up binaries, libraries and other required tools."
-  :group 'decor)
+  :group 'decor
+  :type 'boolean)
 
 (defun decor--check-bin (buff-name cmd)
   "Check if a binary is present on the system.
