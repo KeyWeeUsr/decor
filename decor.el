@@ -29,6 +29,19 @@
 
 ;;; Code:
 
+(defgroup decor
+  nil
+  "Customization group for `decor-mode'-"
+  :group 'convenience
+  :group 'external
+  :group 'frames
+  :group 'x)
+
+(defcustom decor-always-check-deps
+  t
+  "Always look up binaries, libraries and other required tools."
+  :group 'decor)
+
 (defun decor--check-bin (buff-name cmd)
   "Check if a binary is present on the system.
 Argument BUFF-NAME destination to write failure to.
@@ -76,13 +89,15 @@ Argument ON t/nil to enable/disable."
 (defun decor-all-frames-on ()
   "Toggle decorations on for all Emacs frames."
   (interactive)
-  (decor--check-deps)
+  (when decor-always-check-deps
+    (decor--check-deps))
   (decor-toggle-all-frames t))
 
 (defun decor-all-frames-off ()
   "Toggle decorations off for all Emacs frames."
   (interactive)
-  (decor--check-deps)
+  (when decor-always-check-deps
+    (decor--check-deps))
   (decor-toggle-all-frames nil))
 
 ;;;###autoload
