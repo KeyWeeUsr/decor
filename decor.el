@@ -1,10 +1,10 @@
-;;; decor.el --- Modify visual decorations (X11) -*- lexical-binding: t; -*-
+;;; decor.el --- Modify visual decorations -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2023 Peter Badida
 
 ;; Author: Peter Badida <keyweeusr@gmail.com>
-;; Keywords: convenience, window, decoration, distraction, x11, xprop
-;; Version: 1.0.0
+;; Keywords: convenience, window, decoration, distraction, xprop, xwayland
+;; Version: 1.1.0
 ;; Package-Requires: ((emacs "24.1"))
 ;; Homepage: https://github.com/KeyWeeUsr/decor
 
@@ -47,8 +47,11 @@ Argument CMD name of the checked binary."
     (kill-buffer (get-buffer-create buff-name))
 
     ;; binaries
-    (dolist (item (list "xprop"))
-      (when (decor--check-bin buff-name item) (setq failed t)))
+    (when (or (eq window-system "x")
+              (and (eq (getenv "XDG_SESSION_TYPE") "wayland")
+                   (decor--check-bin buff-name "Xwayland")))
+      (dolist (item (list "xprop"))
+        (when (decor--check-bin buff-name item) (setq failed t))))
 
     (if (eq failed t)
         (progn
