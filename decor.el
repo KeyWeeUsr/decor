@@ -4,7 +4,7 @@
 
 ;; Author: Peter Badida <keyweeusr@gmail.com>
 ;; Keywords: convenience, window, decoration, distraction, xprop, xwayland
-;; Version: 1.1.0
+;; Version: 1.2.0
 ;; Package-Requires: ((emacs "24.1"))
 ;; Homepage: https://github.com/KeyWeeUsr/decor
 
@@ -82,6 +82,10 @@ Argument ON t/nil to enable/disable."
                 "-id" win-id "-format" "_MOTIF_WM_HINTS" "32c"
                 "-set" "_MOTIF_WM_HINTS" (if (eq on t) "1" "2")))
 
+(defun decor-toggle-new-frame (frame)
+  "Toggle decorations for a new FRAME via `after-make-frame-functions'."
+  (decor-toggle-single-frame (frame-parameter frame 'outer-window-id) nil))
+
 (defun decor-toggle-all-frames (on)
   "Toggle decorations ON (t) or off (nil) for all Emacs frames."
   (dolist (frame (frame-list))
@@ -107,8 +111,13 @@ Argument ON t/nil to enable/disable."
   :global t
   :group 'decor
   (if decor-mode
-      (decor-all-frames-off)
-    (decor-all-frames-on)))
+      (progn
+        (decor-all-frames-off)
+        (add-hook 'after-make-frame-functions
+                  #'decor-toggle-new-frame))
+    (decor-all-frames-on)
+    (remove-hook 'after-make-frame-functions
+                  #'decor-toggle-new-frame)))
 
 (provide 'decor)
 ;;; decor.el ends here
