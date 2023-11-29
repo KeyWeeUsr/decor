@@ -82,9 +82,10 @@ Argument ON t/nil to enable/disable."
                 "-id" win-id "-format" "_MOTIF_WM_HINTS" "32c"
                 "-set" "_MOTIF_WM_HINTS" (if (eq on t) "1" "2")))
 
-(defun decor-toggle-new-frame (frame)
+(defun decor-toggle-new-frame (&optional frame)
   "Toggle decorations for a new FRAME via `after-make-frame-functions'."
-  (decor-toggle-single-frame (frame-parameter frame 'outer-window-id) nil))
+  (when frame
+    (decor-toggle-single-frame (frame-parameter frame 'outer-window-id) nil)))
 
 (defun decor-toggle-all-frames (on)
   "Toggle decorations ON (t) or off (nil) for all Emacs frames."
