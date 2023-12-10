@@ -4,7 +4,7 @@
 
 ;; Author: Peter Badida <keyweeusr@gmail.com>
 ;; Keywords: convenience, window, decoration, distraction, xprop, xwayland
-;; Version: 1.2.0
+;; Version: 1.3.0
 ;; Package-Requires: ((emacs "24.1"))
 ;; Homepage: https://github.com/KeyWeeUsr/decor
 
@@ -43,6 +43,12 @@
   :group 'decor
   :type 'boolean)
 
+(defcustom decor-use-frame-parameter
+  t
+  "Direct change via `frame-parameter', if compiled with decoration support."
+  :group 'decor
+  :type 'boolean)
+
 (defun decor--check-bin (buff-name cmd)
   "Check if a binary is present on the system.
 Argument BUFF-NAME destination to write failure to.
@@ -73,14 +79,17 @@ Argument CMD name of the checked binary."
           (error "Some deps are missing"))
       (kill-buffer (get-buffer-create buff-name)))))
 
-(defun decor-toggle-single-frame (win-id on)
+(defun decor-toggle-single-frame (win-id on &optional frame)
   "Toggle decorations of a single frame.
 Argument WIN-ID frame's window ID.
-Argument ON t/nil to enable/disable."
-  (call-process "xprop"
-                nil nil nil
-                "-id" win-id "-format" "_MOTIF_WM_HINTS" "32c"
-                "-set" "_MOTIF_WM_HINTS" (if (eq on t) "1" "2")))
+Argument ON t/nil to enable/disable.
+Optional argument FRAME reference to target frame."
+  (if (and frame decor-use-frame-parameter)
+      (set-frame-parameter frame 'undecorated (not on))
+    (call-process "xprop"
+                  nil nil nil
+                  "-id" win-id "-format" "_MOTIF_WM_HINTS" "32c"
+                  "-set" "_MOTIF_WM_HINTS" (if (eq on t) "1" "2"))))
 
 (defun decor-toggle-new-frame (&optional frame)
   "Toggle decorations for a new FRAME via `after-make-frame-functions'."
@@ -91,15 +100,15 @@ Argument ON t/nil to enable/disable."
   "Toggle decorations ON (t) or off (nil) for all Emacs frames."
   (dolist (frame (frame-list))
     (let ((win-id (frame-parameter frame 'outer-window-id)))
-      (if win-id
-          (decor-toggle-single-frame win-id on)
+      (if (or win-id decor-use-frame-parameter)
+          (decor-toggle-single-frame win-id on frame)
         (warn "decor: Could not handle frame %s, missing outer-window-id"
               frame)))))
 
 (defun decor-all-frames-on ()
   "Toggle decorations on for all Emacs frames."
   (interactive)
-  (when decor-always-check-deps
+  (when (and decor-always-check-deps (not decor-use-frame-parameter))
     (decor--check-deps))
   (decor-toggle-all-frames t))
 
