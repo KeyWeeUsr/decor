@@ -90,7 +90,11 @@ Argument ON t/nil to enable/disable."
 (defun decor-toggle-all-frames (on)
   "Toggle decorations ON (t) or off (nil) for all Emacs frames."
   (dolist (frame (frame-list))
-    (decor-toggle-single-frame (frame-parameter frame 'outer-window-id) on)))
+    (let ((win-id (frame-parameter frame 'outer-window-id)))
+      (if win-id
+          (decor-toggle-single-frame win-id on)
+        (warn "decor: Could not handle frame %s, missing outer-window-id"
+              frame)))))
 
 (defun decor-all-frames-on ()
   "Toggle decorations on for all Emacs frames."
