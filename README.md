@@ -1,10 +1,9 @@
+# decor
 [![MELPA][melpa-badge]][melpa-package]
 [![MELPA Stable][melpa-stable-badge]][melpa-stable-package]
 [![Buy me a coffee][bmc-badge]][bmc-link]
 [![Liberapay][lp-badge]][lp-link]
 [![PayPal][ppl-badge]][ppl-link]
-
-# decor
 
 This library attempts to simplify removal of all frame (window) decorations as
 a global minor mode.
