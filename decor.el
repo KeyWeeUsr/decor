@@ -1,10 +1,10 @@
 ;;; decor.el --- Modify visual decorations -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2023 Peter Badida
+;; Copyright (C) 2024 Peter Badida
 
 ;; Author: Peter Badida <keyweeusr@gmail.com>
 ;; Keywords: convenience, window, decoration, distraction, xprop, xwayland
-;; Version: 1.3.1
+;; Version: 1.3.2
 ;; Package-Requires: ((emacs "24.1"))
 ;; Homepage: https://github.com/KeyWeeUsr/decor
 
