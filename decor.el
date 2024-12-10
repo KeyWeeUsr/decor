@@ -67,8 +67,8 @@ Argument CMD name of the checked binary."
     (kill-buffer (get-buffer-create buff-name))
 
     ;; binaries
-    (when (or (eq window-system "x")
-              (and (eq (getenv "XDG_SESSION_TYPE") "wayland")
+    (when (or (eq window-system 'x)
+              (and (string= (getenv "XDG_SESSION_TYPE") "wayland")
                    (decor--check-bin buff-name "Xwayland")))
       (dolist (item (list "xprop"))
         (when (decor--check-bin buff-name item) (setq failed t))))
